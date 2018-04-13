@@ -14,5 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    urn $request->user();
+});
+
+Route::group(['prefix' => 'client'], function () {
+    Route::post('{serialNo}/activation', 'ClientController@activateClient');
+    Route::get('{serialNo}/authinfo', 'ClientController@getAuthInfo');
 });
