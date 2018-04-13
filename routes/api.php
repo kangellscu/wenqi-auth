@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    urn $request->user();
+    return $request->user();
 });
 
 Route::group(['prefix' => 'client'], function () {
