@@ -12,7 +12,7 @@
 */
 
 Route::group(['prefix' => 'aaa'], function () {
-    Route::get('login', 'AuthController@loginPage');
+    Route::get('login', 'AuthController@showLoginForm');
     Route::post('login', 'AuthController@login');
     Route::get('password-changing', 'AuthController@passwordChangingPage');
     Route::post('password-changing', 'AuthController@passwordChanging');
