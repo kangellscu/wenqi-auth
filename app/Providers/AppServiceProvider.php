@@ -38,5 +38,11 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('uuid', function ($attribute, $value, $parameters, $validator) {
             return empty($value) || Uuid::isValid($value);
         });
+
+        // client serial_no, unique
+        Validator::extend('serial_no', function ($attribute, $value, $parameters, $validator) {
+            $pattern = '/^[A-Z]\d{3,5}$/';
+            return empty($value) || preg_match($pattern, $value);
+        });
     }
 }
