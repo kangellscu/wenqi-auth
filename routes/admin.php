@@ -12,13 +12,15 @@
 */
 
 Route::group(['prefix' => 'aaa'], function () {
-    Route::get('login', 'AuthController@showLoginForm');
+    Route::get('login', 'AuthController@showLoginForm')->name('admin.login');
     Route::post('login', 'AuthController@login');
+    Route::get('logout', 'AuthController@logout');
+
     Route::get('password-changing', 'AuthController@passwordChangingPage');
     Route::post('password-changing', 'AuthController@passwordChanging');
 });
 
-Route::group([], function () {
+Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('clients', 'ClientController@clientList');
     Route::put('clients', 'ClientController@createNewClient');
     Route::get('client/{id}', 'ClientController@client');

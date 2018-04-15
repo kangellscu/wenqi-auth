@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -49,5 +50,22 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         return parent::render($request, $exception);
+    }
+
+    /**
+     * Determined auth failed redirect url in terms of guard type 
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        $guards = $exception->guards();
+        $routeName = 'login';
+        foreach ($guards as $k => $guard) {
+            if ($guard == 'admin') {
+                $routeName = 'admin.login';
+            }
+        }
+        return $request->expectsJson()
+                    ? response()->json(['message' => $exception->getMessage()], 401)
+                    : redirect()->guest(route($routeName));
     }
 }
