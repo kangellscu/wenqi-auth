@@ -23,7 +23,7 @@ class AuthController extends BaseController
     {
         $this->validate($request, [
             $this->username()   => 'required|string|max:32',
-            'password'          => 'required|string|max:20',
+            'password'          => 'required|password',
         ]);
     }
 

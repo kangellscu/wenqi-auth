@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Ramsey\Uuid\Uuid;
+use Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->extendValidator();
     }
 
     /**
@@ -24,5 +26,17 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    private function extendValidator()
+    {
+        Validator::extend('password', function ($attribute, $value, $parameters, $validator) {
+            $len = strlen($value);
+            return $len >= 4 && $len <= 16;
+        });
+
+        Validator::extend('uuid', function ($attribute, $value, $parameters, $validator) {
+            return empty($value) || Uuid::isValid($value);
+        });
     }
 }
