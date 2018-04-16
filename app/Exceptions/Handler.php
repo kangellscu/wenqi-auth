@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -89,5 +90,17 @@ class Handler extends ExceptionHandler
                             'message' => $exception->getMessage(),
                         ], 401)
                     : redirect()->guest(route($routeName));
+    }
+
+    /**
+     * Format validation error json output format
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json([
+            'code'      => 10000,
+            'message'   => $exception->getMessage(),
+            'errors' => $exception->errors(),
+        ], $exception->status);
     }
 }

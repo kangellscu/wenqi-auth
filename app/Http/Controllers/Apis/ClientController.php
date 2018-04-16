@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Apis;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller as BaseController;
+use App\Http\Controllers\ApiController as BaseController;
 use App\Services\ClientService;
 
 class ClientController extends BaseController
@@ -32,12 +32,10 @@ class ClientController extends BaseController
         );
         */
 
-        return response()->json([
-                'code'      => 0,
-                'msg'       => 'success',
-                'nonceStr'  => 'f40876c33d414b61bef6a044817dbf99',
-                'sign'      => 'sha256 signature',
-                'currTimestamp' => time(),
+        return $this->json([
+            'nonceStr'      => 'f40876c33d414b61bef6a044817dbf99',
+            'currTimestamp' => time(),
+            'sign'          => 'sha256 signature',
         ]);
     }
 }
