@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Ramsey\Uuid\Uuid;
 use Validator;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->extendValidator();
+        $this->schemaModifier();
     }
 
     /**
@@ -26,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    private function schemaModifier()
+    {
+        Schema::defaultStringLength(255);
     }
 
     private function extendValidator()
