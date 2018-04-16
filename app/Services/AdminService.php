@@ -3,7 +3,7 @@ namespace App\Services;
 
 use Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Admin;
+use App\Models\AdminModel;
 use App\Exceptions\Admins\AdminPasswordIncorrectException;
 
 class AdminService
@@ -14,7 +14,7 @@ class AdminService
     public function changePassword(
         string $adminId, string $currPassword, string $password
     ) {
-        $admin = Admin::find($adminId);
+        $admin = AdminModel::find($adminId);
 
         if ( ! Hash::check($currPassword, $admin->password)) {
             throw new AdminPasswordIncorrectException('当前密码不正确');

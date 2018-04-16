@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Client as ClientModel;
 use App\Models\ClientAuthHistory as ClientAuthHistoryModel;
 use App\Exceptions\Clients\ClientNotExistsException;
+use App\Exceptions\Clients\ClientExistsException;
 
 class ClientService
 {
@@ -33,5 +35,27 @@ class ClientService
         $client->activate()->save();
 
         return true;
+    }
+
+    /**
+     * @param string $serialNo
+     *
+     * @return string           new client id
+     */
+    public function createNewClient(string $serialNo) : string
+    {
+        $client = ClientModel::where('serial_no', $serialNo)->first();
+        if ($client) {
+            throw new ClientExistsException(
+                sprintf('软件号: %s 已经存在，请不要重复创建', $serialNo)
+            );
+        }
+
+        $newClient = ClientModel::create([
+            'serial_no' => $serialNo,
+            'status'    => ClientModel::STATUS_INIT,
+        ]);
+
+        return $newClient->id;
     }
 }

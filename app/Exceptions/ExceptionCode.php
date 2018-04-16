@@ -19,6 +19,7 @@ final class ExceptionCode
     //      Client 
     //**********************
     const CLIENT_NOT_EXISTS = 10101;
+    const CLIENT_EXISTS = 10102;
 
     //**********************
     //      Admin

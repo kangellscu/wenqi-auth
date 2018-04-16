@@ -15,12 +15,12 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('serial_no')->unique();
-            $table->string('client_name');
-            $table->string('mac_address');
-            $table->string('disk_serial_no');
-            $table->dateTime('auth_begin_date');
-            $table->dateTime('auth_end_date');
+            $table->string('serial_no', 16)->unique();
+            $table->string('client_name', 45)->nullable();
+            $table->string('mac_address', 32)->nullable();
+            $table->string('disk_serial_no', 32)->nullable();
+            $table->dateTime('auth_begin_date')->nullable();
+            $table->dateTime('auth_end_date')->nullable();
             $table->tinyInteger('status');
             $table->timestamps();
         });
