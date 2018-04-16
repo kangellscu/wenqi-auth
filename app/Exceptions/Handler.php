@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 
@@ -52,6 +53,23 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
     }
 
+    /*
+     * Format error json output format
+     */
+    protected function prepareJsonResponse($request, Exception $e)
+    {
+        $status = $this->isHttpException($e) ? $e->getStatusCode() : 500;
+        $headers = $this->isHttpException($e) ? $e->getHeaders() : [];
+
+        $output = array_merge(
+            ['code' => $e->getStatusCode()],
+            $this->convertExceptionToArray($e));
+        return new JsonResponse(
+            $output, $status, $headers,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
+    }
+
     /**
      * Determined auth failed redirect url in terms of guard type 
      */
@@ -65,7 +83,11 @@ class Handler extends ExceptionHandler
             }
         }
         return $request->expectsJson()
-                    ? response()->json(['message' => $exception->getMessage()], 401)
+                    ? response()->json(
+                        [
+                            'code'  => 401,
+                            'message' => $exception->getMessage(),
+                        ], 401)
                     : redirect()->guest(route($routeName));
     }
 }
