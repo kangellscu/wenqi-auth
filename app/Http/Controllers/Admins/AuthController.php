@@ -6,6 +6,8 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Controller as BaseController;
+use App\Services\AdminService;
+
 
 class AuthController extends BaseController
 {
@@ -17,6 +19,35 @@ class AuthController extends BaseController
     public function showLoginForm()
     {
         return view('admin.login');
+    }
+
+    /**
+     * Show password changing form
+     */
+    public function showPasswordChangingForm()
+    {
+        return view('admin.passwordChanging');
+    }
+
+    /**
+     * Change admin himself password
+     */
+    public function passwordChanging(
+        Request $request,
+        AdminService $adminService        
+    ) {
+        $this->validate($request, [
+            'currPassword'  => 'required|password',
+            'password'      => 'required|password|confirmed',
+        ]);
+
+        $adminService->changePassword(
+            Auth::id(),
+            $request->request->get('currPassword'),
+            $request->request->get('password')
+        );
+
+        return redirect()->route('admin.dashboard');
     }
 
     protected function validateLogin(Request $request)

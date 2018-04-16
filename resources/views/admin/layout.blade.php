@@ -46,6 +46,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+            <li class="nav">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    您好: {{ Auth::guard("admin")->user()->name }}<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/admin/aaa/password-changing">修改密码</a>
+                    </li>
+                </ul>
+            </li>
             <li><a href="#">退出</a></li>
           </ul>
         </div>

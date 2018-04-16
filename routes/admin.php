@@ -15,13 +15,15 @@ Route::group(['prefix' => 'aaa'], function () {
     Route::get('login', 'AuthController@showLoginForm')->name('admin.login');
     Route::post('login', 'AuthController@login');
     Route::get('logout', 'AuthController@logout');
-
-    Route::get('password-changing', 'AuthController@passwordChangingPage');
-    Route::post('password-changing', 'AuthController@passwordChanging');
 });
 
 Route::group(['middleware' => 'auth:admin'], function () {
-    Route::get('clients', 'ClientController@clientList');
+    Route::group(['prefix' => 'aaa'], function () {
+        Route::get('password-changing', 'AuthController@showPasswordChangingForm');
+        Route::post('password-changing', 'AuthController@passwordChanging');
+    });
+
+    Route::get('clients', 'ClientController@clientList')->name('admin.dashboard');
     Route::put('clients', 'ClientController@createNewClient');
     Route::get('client/{id}', 'ClientController@client');
     Route::post('client/{id}', 'ClientController@editClient');

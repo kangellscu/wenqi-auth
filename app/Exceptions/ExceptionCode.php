@@ -16,7 +16,12 @@ final class ExceptionCode
     const AUTHENTICATION = 10002;
 
     //**********************
-    //      User
+    //      Client 
     //**********************
     const CLIENT_NOT_EXISTS = 10101;
+
+    //**********************
+    //      Admin
+    //**********************
+    const ADMIN_PASSWORD_INCORRECT = 10201;
 }
