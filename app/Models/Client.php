@@ -30,4 +30,23 @@ class Client extends Model
      * @var array
      */
     protected $dates = ['auth_begin_date', 'auth_end_date'];
+
+    /**
+     * Indicate whether client aready activated or not
+     *
+     * @return bool
+     */
+    public function isActivate() : bool
+    {
+        return $this->status == self::STATUS_ACTIVE;
+    }
+
+    /**
+     * Activate client
+     */
+    public function activate() : Client
+    {
+        $this->status = self::STATUS_ACTIVE;
+        return $this;
+    }
 }

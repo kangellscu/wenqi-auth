@@ -24,13 +24,11 @@ class ClientController extends BaseController
         ]);
 
         // invoke service
-        /*
         $success = $clientService->activateClient(
             $request->request->get('serialNo'),
             $request->request->get('macAddr'),
             $request->request->get('diskSerialNo')
         );
-        */
 
         return $this->json([
             'nonceStr'      => 'f40876c33d414b61bef6a044817dbf99',

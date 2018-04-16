@@ -7,6 +7,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
+use App\Exceptions\ExceptionCode;
+use App\Exceptions\AppException;
 
 class Handler extends ExceptionHandler
 {
@@ -63,12 +65,26 @@ class Handler extends ExceptionHandler
         $headers = $this->isHttpException($e) ? $e->getHeaders() : [];
 
         $output = array_merge(
-            ['code' => $e->getStatusCode()],
+            ['code' => $this->genExceptionCode($e)],
             $this->convertExceptionToArray($e));
         return new JsonResponse(
             $output, $status, $headers,
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
+    }
+
+    /**
+     * @param \Exception $e
+     *
+     * @return integer          json response message body code 
+     */
+    protected function genExceptionCode(Exception $e) : int
+    {
+        if ($e instanceof AppException) {
+            return $e->getCode();
+        }
+
+        return $this->isHttpException($e) ? $e->getStatusCode() : 500;
     }
 
     /**
@@ -86,8 +102,8 @@ class Handler extends ExceptionHandler
         return $request->expectsJson()
                     ? response()->json(
                         [
-                            'code'  => 401,
-                            'message' => $exception->getMessage(),
+                            'code'      => ExceptionCode::AUTHENTICATION,
+                            'message'   => $exception->getMessage(),
                         ], 401)
                     : redirect()->guest(route($routeName));
     }
@@ -98,7 +114,7 @@ class Handler extends ExceptionHandler
     protected function invalidJson($request, ValidationException $exception)
     {
         return response()->json([
-            'code'      => 10000,
+            'code'      => ExceptionCode::FORM_VALIDATION,
             'message'   => $exception->getMessage(),
             'errors' => $exception->errors(),
         ], $exception->status);
