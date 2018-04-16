@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function schemaModifier()
     {
-        Schema::defaultStringLength(255);
+        Schema::defaultStringLength(191);
     }
 
     private function extendValidator()
