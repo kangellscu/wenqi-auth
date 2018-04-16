@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admins;
+namespace App\Http\Controllers\Apis;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
@@ -13,7 +13,7 @@ class ClientController extends BaseController
      */
     public function activateClient(
         Request $request,
-        ClientService $clientService
+        ClientService $clientService,
         string $serialNo
     ) {
         $request->request->set('serialNo', $serialNo);
@@ -24,13 +24,20 @@ class ClientController extends BaseController
         ]);
 
         // invoke service
+        /*
         $success = $clientService->activateClient(
             $request->request->get('serialNo'),
             $request->request->get('macAddr'),
             $request->request->get('diskSerialNo')
         );
+        */
 
-        // todo return response, should defined a json
-        // response, place signature in it
+        return response()->json([
+                'code'      => 0,
+                'msg'       => 'success',
+                'nonceStr'  => 'f40876c33d414b61bef6a044817dbf99',
+                'sign'      => 'sha256 signature',
+                'currTimestamp' => time(),
+        ]);
     }
 }
