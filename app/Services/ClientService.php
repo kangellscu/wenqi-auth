@@ -82,6 +82,8 @@ class ClientService
         if ($serialNo) {
             $query->where('serialNo', $serialNo);
         }
+        $queryCount = clone($query);
+
         $offset = ($page - 1) * $size;
         $clients = $query->orderBy('created_at', 'desc')
                          ->offset($offset)
@@ -99,7 +101,7 @@ class ClientService
                                 'statusDesc'        => $client->statusDesc(),
                             ];
                          });
-        $totalRecords = $query->count();
+        $totalRecords = $queryCount->count();
         $totalPages = $totalRecords ? (int) ceil($totalRecords / $size) : 1;
 
         return (object) [
@@ -159,9 +161,27 @@ class ClientService
         int $page,
         int $size
     ) : object {
+        $query = ClientAuthHistoryModel::where('client_id', $clientId);
+        $queryCount = clone($query);
+
+        $offset = ($page - 1) * $size;
+        $histories = $query->orderBy('created_at', 'desc')
+                           ->offset($offset)
+                           ->limit($size)
+                           ->get()
+                           ->map(function ($item) {
+                                return (object) [
+                                    'comment'       => $item->comment,
+                                    'authEndDate'   => $item->auth_end_date,
+                                    'createdAt'     => $item->created_at,
+                                ];
+                           });
+        $totalRecords = $queryCount->count();
+        $totalPages = $totalRecords ? (int) ceil($totalRecords / $size) : 1;
+
         return (object) [
-            'histories'     => collect(),
-            'totalPages'    => 0,
+            'histories'     => $histories,
+            'totalPages'    => $totalPages,
         ];
     }
 

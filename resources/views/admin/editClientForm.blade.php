@@ -7,11 +7,6 @@
 <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 @endsection
 
-@section('nav-sidebar')
-    @component('admin.componentSidebar', ['navActive' => 'new'])
-    @endcomponent
-@endsection
-
 @section('body-content')
 <h1 class="page-header">软件信息</h1>
 <form class="form-horizontal" method="post" action="/admin/clients/{{ $client->id }}">
@@ -92,6 +87,31 @@
         </div>
     </div>
 </form>
+
+{{-- Auth history --}}
+<h1 class="page-header">授权历史</h1>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>授权时间</th>
+          <th>授权截止日</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody> 
+    @foreach ($histories->histories as $authItem)
+        <tr>
+          <th>{{ $authItem->createdAt->format('Y-m-d H:i:s') }}</th>
+          <th>{{ $authItem->authEndDate->format('Y-m-d') }}</th>
+          <th>{{ $authItem->comment ?: '-' }}</th>
+        </tr>
+    @endforeach
+      </tbody>
+    </table>
+</div>
+@component('admin.componentPagination', ['page' => $page, 'totalPages' => $histories->totalPages])
+@endcomponent
 @endsection
 
 @section('body-assets')

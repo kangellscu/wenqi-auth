@@ -82,16 +82,18 @@ class ClientController extends BaseController
             'size'      => 'integer|min:1|max:100',
         ]);
 
+        $page = (int) $request->query->get('page', 1);
         $client = $clientService->getClient($request->query->get('clientId'));
         $histories = $clientService->listClientAuthorizationHistories(
             $request->query->get('clientId'),
-            $request->query->get('page', 1),
+            $page,
             $request->query->get('size', $this->defaultPageSize)
         );
 
         return view('admin.editClientForm', [
             'client'    => $client,
             'histories' => $histories,
+            'page'      => $page >= $histories->totalPages ? $histories->totalPages : $page,
         ]);
     }
 

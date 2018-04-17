@@ -1,7 +1,13 @@
 @inject('request', 'Illuminate\Http\Request')
 @php
-    $navNum = 3;
-    $navStart = ((int) floor($page/$navNum)) * $navNum;
+    $navNum = 1;
+    if ($page == 1) {
+        $navStart = 0;
+    } elseif ($page % $navNum == 0) {
+        $navStart = $page - $navNum;
+    } else {
+        $navStart = ((int) floor($page/$navNum)) * $navNum;
+    }
     $nextFirstStep = $navStart + $navNum + 1;
 @endphp
 <nav aria-label="...">
@@ -26,11 +32,11 @@
     @endif
     @if ($stepPage == $page)
         <li class="active">
-            <a href="javascript:void();"> {{ $stepPage }}</a>
+            <a href="javascript:void();">{{ $stepPage }}</a>
         </li>
     @else
         <li>
-            <a href="{{ $request->fullUrlWithQuery(['page' => $stepPage]) }}">1</a>
+            <a href="{{ $request->fullUrlWithQuery(['page' => $stepPage]) }}">{{ $stepPage }}</a>
         </li>
     @endif
 @endforeach
