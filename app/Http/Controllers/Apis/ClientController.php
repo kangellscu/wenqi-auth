@@ -30,10 +30,30 @@ class ClientController extends BaseController
             $request->request->get('diskSerialNo')
         );
 
+        return $this->json();
+    }
+
+    
+    /**
+     * Get auth info
+     */
+    public function getAuthInfo(
+        Request $request,
+        ClientService $clientService,
+        string $serialNo
+    ) {
+        $request->request->set('serialNo', $serialNo);
+        $this->validate($request, [
+            'serialNo'      => 'required|serial_no',
+        ]);
+
+        $authInfo = $clientService->getAuthorization($serialNo);
+
         return $this->json([
-            'nonceStr'      => 'f40876c33d414b61bef6a044817dbf99',
-            'currTimestamp' => time(),
-            'sign'          => 'sha256 signature',
+            'authBeginDate' => $authInfo->authBeginDate ?
+                $authInfo->authBeginDate->format('Y-m-d') : null,
+            'authEndDate'   => $authInfo->authEndDate ?
+                $authInfo->authEndDate->format('Y-m-d') : null,
         ]);
     }
 }

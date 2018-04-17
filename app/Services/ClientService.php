@@ -9,6 +9,7 @@ use App\Models\Client as ClientModel;
 use App\Models\ClientAuthHistory as ClientAuthHistoryModel;
 use App\Exceptions\Clients\ClientNotExistsException;
 use App\Exceptions\Clients\ClientExistsException;
+use App\Exceptions\Clients\ClientNotActivateException;
 
 class ClientService
 {
@@ -227,5 +228,25 @@ class ClientService
                 'auth_end_date'     => $authEndDate,
             ]);
         });
+    }
+
+
+    /**
+     * Get authorization info
+     */
+    public function getAuthorization(string $serialNo) : object
+    {
+        $client = ClientModel::where('serial_no', $serialNo)->first();
+        if ( ! $client) {
+            throw new ClientNotExistsException('客户软件不存在');
+        }
+        if ( ! $client->isActivate()) {
+            throw new ClientNotActivateException('客户软件未激活');
+        }
+
+        return (object) [
+            'authBeginDate' => $client->auth_begin_date, 
+            'authEndDate'   => $client->auth_end_date,
+        ];
     }
 }
