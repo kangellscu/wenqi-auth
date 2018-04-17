@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use App\Models\Client as ClientModel;
 use App\Models\ClientAuthHistory as ClientAuthHistoryModel;
 use App\Exceptions\Clients\ClientNotExistsException;
@@ -57,5 +58,52 @@ class ClientService
         ]);
 
         return $newClient->id;
+    }
+
+    /**
+     * List all clients
+     *
+     * @return Collection       elements as below:
+     *                          - clients Collection
+     *                              - id uuid               client primary key
+     *                              - serialNo string
+     *                              - clientName ?string
+     *                              - macAddr ?string
+     *                              - diskSerialNo ?string
+     *                              - authBeginDate ?\Carbon\Carbon
+     *                              - authEndDate ?\Carbon\Carbon
+     *                              - statusDesc string
+     *                          - totalPages int
+     */
+    public function listAllClients(?string $serialNo, int $page, int $size) : object
+    {
+        $query = ClientModel::query();
+        if ($serialNo) {
+            $query->where('serialNo', $serialNo);
+        }
+        $offset = ($page - 1) * $size;
+        $clients = $query->orderBy('created_at', 'desc')
+                         ->offset($offset)
+                         ->limit($size)
+                         ->get()
+                         ->map(function ($client) {
+                            return (object) [
+                                'id'                => $client->id,
+                                'serialNo'          => $client->serial_no,
+                                'clientName'        => $client->client_name,
+                                'macAddr'        => $client->mac_address,
+                                'diskSerialNo'      => $client->disk_serial_no,
+                                'authBeginDate'     => $client->auth_begin_date,
+                                'authEndDate'       => $client->auth_end_date,
+                                'statusDesc'        => $client->statusDesc(),
+                            ];
+                         });
+        $totalRecords = $query->count();
+        $totalPages = $totalRecords ? (int) ceil($totalRecords / $size) : 1;
+
+        return (object) [
+            'clients'       => $clients,
+            'totalPages'    => $totalPages,
+        ];
     }
 }

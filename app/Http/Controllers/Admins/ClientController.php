@@ -9,12 +9,30 @@ use App\Services\ClientService;
 class ClientController extends BaseController
 {
     /**
-     * List clients
+     * List all clients
      */
     public function clientList(
-        Request $request
+        Request $request,
+        ClientService $clientService
     ) {
-        return view('admin.clientList');
+        $this->validate($request, [
+            'serialNo'  => 'serial_no',
+            'page'      => 'integer|min:1|max:1000',
+            'size'      => 'integer|min:1|max:100',
+        ]);
+
+        $page = (int) $request->query->get('page', 1);
+        $res = $clientService->listAllClients(
+            $request->query->get('serialNo'),
+            $page,
+            (int) $request->query->get('size', $this->defaultPageSize)
+        );
+
+        return view('admin.clientList', [
+            'clients'       => $res->clients,
+            'page'          => $page >= $res->totalPages ? $res->totalPages : $page,
+            'totalPages'    => $res->totalPages,
+        ]);
     }
 
 

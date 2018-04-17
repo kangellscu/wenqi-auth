@@ -9,6 +9,11 @@ class Client extends Model
     const STATUS_INIT = 1;
     const STATUS_ACTIVE = 2;
 
+    static public $statusMap = [
+        self::STATUS_INIT   => '待激活',
+        self::STATUS_ACTIVE => '已激活',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -30,6 +35,11 @@ class Client extends Model
      * @var array
      */
     protected $dates = ['auth_begin_date', 'auth_end_date'];
+
+    public function statusDesc()
+    {
+        return array_get(self::$statusMap, $this->status, '未知');
+    }
 
     /**
      * Indicate whether client aready activated or not
