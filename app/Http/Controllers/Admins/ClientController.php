@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as BaseController;
 use App\Services\ClientService;
@@ -92,5 +93,53 @@ class ClientController extends BaseController
             'client'    => $client,
             'histories' => $histories,
         ]);
+    }
+
+
+    /**
+     * Edit client
+     */
+    public function editClient(
+        Request $request,
+        ClientService $clientService,
+        string $clientId
+    ) {
+        $request->request->set('clientId', $clientId);
+        $this->validate($request, [
+            'clientId'      => 'required|uuid',
+            'clientName'    => 'string|nullable|max:12',
+        ]);
+
+        $clientService->editClient(
+            $clientId,
+            $request->request->get('clientName', '')
+        );
+
+        return back();
+    }
+
+
+    /**
+     * Authorize client
+     */
+    public function authorizeClient(
+        Request $request,
+        ClientService $clientService,
+        string $clientId
+    ) {
+        $request->request->set('clientId', $clientId);
+        $this->validate($request, [
+            'clientId'      => 'required|uuid',
+            'authEndDate'   => 'required|date_format:Y-m-d',
+            'comment'       => 'string|nullable|max:128',
+        ]);
+
+        $clientService->authorizeClient(
+            $clientId,
+            Carbon::parse($request->request->get('authEndDate')),
+            $request->request->get('comment')
+        );
+
+        return back();
     }
 }

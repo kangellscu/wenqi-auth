@@ -68,7 +68,7 @@
 
 {{-- Auth form --}}
 <h1 class="page-header">软件授权</h1>
-<form class="form-horizontal" method="post" action="/admins/clients/{{ $client->id }}/authorization">
+<form class="form-horizontal" method="post" action="/admin/clients/{{ $client->id }}/authorization">
     <div class="form-group">
         <label for="dtp_input2" class="col-sm-2 control-label">授权截止日期</label>
         <div class="input-group date form_date col-sm-3" data-date="" data-date-format="dd MM yyyy" data-link-field="auth-enddate" data-link-format="yyyy-mm-dd">

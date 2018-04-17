@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use App\Models\Client as ClientModel;
@@ -124,6 +125,9 @@ class ClientService
     public function getClient(string $clientId) : object
     {
         $client = ClientModel::find($clientId);
+        if ( ! $client) {
+            throw new ClientNotExistsException('软件编号不存在，请联系管理人员添加');
+        }
         return (object) [
             'id'            => $client->id,
             'serialNo'      => $client->serial_no,
@@ -159,5 +163,49 @@ class ClientService
             'histories'     => collect(),
             'totalPages'    => 0,
         ];
+    }
+
+    /**
+     * Edit client
+     */
+    public function editClient(string $clientId, string $clientName) : bool
+    {
+        $client = ClientModel::find($clientId);
+        if ( ! $client) {
+            throw new ClientNotExistsException('软件编号不存在，请联系管理人员添加');
+        }
+
+        $client->client_name = $clientName;
+        return $client->save();
+    }
+
+    
+    /**
+     * Authorize client
+     */
+    public function authorizeClient(
+        string $clientId,
+        Carbon $authEndDate,
+        ?string $comment
+    ) {
+        $client = ClientModel::find($clientId);
+        if ( ! $client) {
+            throw new ClientNotExistsException('软件编号不存在，请联系管理人员添加');
+        }
+
+        $authBeginDate = Carbon::today();
+        $authEndDate->endOfDay();
+
+        DB::transaction(function () use ($client, $authBeginDate, $authEndDate, $comment) {
+            $client->auth_begin_date = $authBeginDate;
+            $client->auth_end_date = $authEndDate;
+            $client->save();
+            ClientAuthHistoryModel::create([
+                'client_id'         => $client->id,
+                'comment'           => $comment ?: '',
+                'auth_begin_date'   => $authBeginDate,
+                'auth_end_date'     => $authEndDate,
+            ]);
+        });
     }
 }
