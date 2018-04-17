@@ -106,4 +106,58 @@ class ClientService
             'totalPages'    => $totalPages,
         ];
     }
+
+    /**
+     * Show edit client form
+     *
+     * @param string $clientId
+     *
+     * @return object           properites as below:
+     *                          - id string
+     *                          - clientName ?string
+     *                          - macAddr ?string
+     *                          - diskSerialNo ?string
+     *                          - authBeginDate ?\Carbon\Carbon
+     *                          - authEndDate ?\Carbon\Carbon
+     *                          - statusDesc string
+     */
+    public function getClient(string $clientId) : object
+    {
+        $client = ClientModel::find($clientId);
+        return (object) [
+            'id'            => $client->id,
+            'serialNo'      => $client->serial_no,
+            'clientName'    => $client->client_name,
+            'macAddr'       => $client->mac_address,
+            'diskSerialNo'  => $client->disk_serial_no,
+            'authBeginDate' => $client->auth_begin_date,
+            'authEndDate'   => $client->auth_end_date,
+            'statusDesc'    => $client->statusDesc(),
+        ];
+    }
+
+    /**
+     * List all client authorization histories
+     *
+     * @param string $clientId
+     * @param int $page
+     * @param int $size
+     *
+     * @return object       properites as below:
+     *                      - histories Collection
+     *                          - comment ?string
+     *                          - createdAt ?\Carbon\Carbon
+     *                          - authEndDate ?\Carbon\Carbon
+     *                      - totalPages int
+     */
+    public function listClientAuthorizationHistories(
+        string $clientId,
+        int $page,
+        int $size
+    ) : object {
+        return (object) [
+            'histories'     => collect(),
+            'totalPages'    => 0,
+        ];
+    }
 }

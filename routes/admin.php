@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('clients', 'ClientController@clientList')->name('admin.dashboard');
     Route::get('clients/create-form', 'ClientController@showCreateNewClientForm');
     Route::put('clients', 'ClientController@createNewClient');
-    Route::get('clients/{id}', 'ClientController@showClientForm');
+    Route::get('clients/{id}', 'ClientController@showEditClientForm');
     Route::post('clients/{id}', 'ClientController@editClient');
     Route::put('clients/{id}/authorization', 'ClientController@authorizeClient');
 });
