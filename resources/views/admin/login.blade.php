@@ -8,7 +8,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Signin Template for Bootstrap</title>
     <title>江宜科技</title>
 
     <!-- Bootstrap core CSS -->
