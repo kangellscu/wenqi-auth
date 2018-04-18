@@ -9,6 +9,7 @@
     <meta name="author" content="">
 
     <title>Signin Template for Bootstrap</title>
+    <title>江宜科技</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
