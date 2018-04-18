@@ -16,7 +16,7 @@
     @component('admin.componentAlert')
     @endcomponent
 
-<h1 class="page-header">修改密码</h1>
+<h1 class="page-header">创建软件</h1>
 <form class="form-horizontal" method="post" action="/admin/clients">
     <div class="form-group">
         <label for="serialno" class="col-sm-2 control-label">软件号</label>
