@@ -33,9 +33,12 @@
   <body>
 
     <div class="container">
-
       <form class="form-signin" method="post" action="/admin/aaa/login">
         <h2 class="form-signin-heading">登录</h2>
+
+@component('admin.componentAlert')
+@endcomponent
+
         <label for="inputName" class="sr-only">用户名</label>
         <input type="text" id="inputName" class="form-control" name="name" placeholder="您的登录名" required autofocus>
         <label for="inputPassword" class="sr-only">密码</label>

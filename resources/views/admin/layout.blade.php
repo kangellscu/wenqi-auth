@@ -56,7 +56,7 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="#">退出</a></li>
+            <li><a href="/admin/aaa/logout">退出</a></li>
           </ul>
         </div>
       </div>

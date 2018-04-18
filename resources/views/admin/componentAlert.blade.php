@@ -10,7 +10,7 @@
         @foreach ($messages as $message)
 <div class="alert alert-{{ ! empty($errorLevel) ? $errorLevel : 'danger' }} alert-dismissible">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>{{ $key }}: </strong> {{ $message }}
+    {{--<strong>{{ $key }}: </strong>--}} {{ $message }}
 </div>
         @endforeach
     @endforeach
