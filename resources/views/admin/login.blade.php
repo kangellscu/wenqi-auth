@@ -43,11 +43,13 @@
         <input type="text" id="inputName" class="form-control" name="name" placeholder="您的登录名" required autofocus>
         <label for="inputPassword" class="sr-only">密码</label>
         <input type="password" id="inputPassword" class="form-control" name="password" placeholder="密码" required>
+        {{--
         <div class="checkbox">
           <label>
             <input type="checkbox" name="remember" value="remember-me">记住我 
           </label>
         </div>
+        --}}
         {{ csrf_field() }}
         <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
       </form>
