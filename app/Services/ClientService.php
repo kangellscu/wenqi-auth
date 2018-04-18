@@ -238,7 +238,7 @@ class ClientService
     {
         $client = ClientModel::where('serial_no', $serialNo)->first();
         if ( ! $client) {
-            throw new ClientNotExistsException('客户软件不存在');
+            throw new ClientNotExistsException(sprintf('客户软件: %s 不存在', $serialNo));
         }
         if ( ! $client->isActivate()) {
             throw new ClientNotActivateException('客户软件未激活');

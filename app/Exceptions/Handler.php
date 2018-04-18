@@ -74,6 +74,29 @@ class Handler extends ExceptionHandler
     }
 
     /**
+     * @override
+     */
+    protected function convertExceptionToArray(Exception $e)
+    {
+        return config('app.debug') ? [
+            'message' => $e->getMessage(),
+            'exception' => get_class($e),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => collect($e->getTrace())->map(function ($trace) {
+                return Arr::except($trace, ['args']);
+            })->all(),
+        ] : [
+            'message' => ($this->isHttpException($e) || $this->isAppException($e)) ? $e->getMessage() : 'Server Error',
+        ];
+    }
+
+    protected function isAppException(Exception $e) : bool
+    {
+        return $e instanceof AppException;
+    }
+
+    /**
      * @param \Exception $e
      *
      * @return integer          json response message body code 
