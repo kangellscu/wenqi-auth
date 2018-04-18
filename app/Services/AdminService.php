@@ -3,7 +3,7 @@ namespace App\Services;
 
 use Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\AdminModel;
+use App\Models\Admin as AdminModel;
 use App\Exceptions\Admins\AdminPasswordIncorrectException;
 
 class AdminService
