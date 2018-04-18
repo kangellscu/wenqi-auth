@@ -8,6 +8,10 @@
 @endsection
 
 @section('body-content')
+
+    @component('admin.componentAlert')
+    @endcomponent
+
 <h1 class="page-header">软件信息</h1>
 <form class="form-horizontal" method="post" action="/admin/clients/{{ $client->id }}">
     <div class="form-group">

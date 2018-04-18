@@ -12,12 +12,17 @@
 @endsection
 
 @section('body-content')
+
+    @component('admin.componentAlert')
+    @endcomponent
+
 <h1 class="page-header">修改密码</h1>
 <form class="form-horizontal" method="post" action="/admin/clients">
     <div class="form-group">
         <label for="serialno" class="col-sm-2 control-label">软件号</label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <input type="text" id="serialno" name="serialNo" class="form-control" />
+            <p class="help-block">一位大写字母接着3到5位数字.例:F001</p>
         </div>
     </div>
     <input type="hidden" name="_method" value="put">

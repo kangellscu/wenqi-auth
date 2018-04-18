@@ -55,6 +55,8 @@ class ClientController extends BaseController
     ) {
         $this->validate($request, [
             'serialNo'  => 'required|serial_no',
+        ], [
+            'serialNo.*'    => '软件号未填写或格式错误',
         ]);
 
         $clientService->createNewClient(
@@ -110,6 +112,8 @@ class ClientController extends BaseController
         $this->validate($request, [
             'clientId'      => 'required|uuid',
             'clientName'    => 'string|nullable|max:12',
+        ], [
+            'clientName.max'    => '客户名最多不能超过12个字符', 
         ]);
 
         $clientService->editClient(
@@ -134,6 +138,9 @@ class ClientController extends BaseController
             'clientId'      => 'required|uuid',
             'authEndDate'   => 'required|date_format:Y-m-d',
             'comment'       => 'string|nullable|max:128',
+        ], [
+            'authEndDate.*' => '授权截止日期未填写或格式错误',
+            'comment.max'   => '授权备注最多不能超过128个字符',
         ]);
 
         $clientService->authorizeClient(
