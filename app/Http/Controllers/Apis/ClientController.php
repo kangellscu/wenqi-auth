@@ -24,13 +24,15 @@ class ClientController extends BaseController
         ]);
 
         // invoke service
-        $success = $clientService->activateClient(
+        $authInfo = $clientService->activateClient(
             $request->request->get('serialNo'),
             $request->request->get('macAddr'),
             $request->request->get('diskSerialNo')
         );
 
-        return $this->json();
+        return $this->json([
+            'authEndDate'   => $authInfo->authEndDate->format('Y-m-d'),
+        ]);
     }
 
     

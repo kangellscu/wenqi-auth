@@ -22,24 +22,27 @@ class ClientService
      * @param string $diskSerialNo  disk serial no which client
      *                              running on it
      *
-     * @return bool
+     * @return object
      */
     public function activateClient(
         string $serialNo, string $macAddr, string $diskSerialNo
-    ) : bool {
+    ) : object {
         $client = ClientModel::where('serial_no', $serialNo)->first();
         if ( ! $client) {
             throw new ClientNotExistsException('软件编号不存在，请联系管理人员添加');
         }
         if ($client->isActivate()) {
-            return true;
+            $authEndDate = $client->auth_end_date ?: Carbon::yesterday();
+        } else {
+            $client->mac_address = $macAddr;
+            $client->disk_serial_no = $diskSerialNo;
+            $client->activate()->save();
+            $authEndDate = $client->auth_end_date ?: Carbon::tomorrow();
         }
 
-        $client->mac_address = $macAddr;
-        $client->disk_serial_no = $diskSerialNo;
-        $client->activate()->save();
-
-        return true;
+        return (object) [
+            'authEndDate'   => $authEndDate,
+        ];
     }
 
     /**
