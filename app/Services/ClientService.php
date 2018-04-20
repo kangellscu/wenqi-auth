@@ -35,6 +35,8 @@ class ClientService
             return true;
         }
 
+        $client->mac_address = $macAddr;
+        $client->disk_serial_no = $diskSerialNo;
         $client->activate()->save();
 
         return true;
