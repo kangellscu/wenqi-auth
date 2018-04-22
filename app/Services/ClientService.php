@@ -10,6 +10,7 @@ use App\Models\ClientAuthHistory as ClientAuthHistoryModel;
 use App\Exceptions\Clients\ClientNotExistsException;
 use App\Exceptions\Clients\ClientExistsException;
 use App\Exceptions\Clients\ClientNotActivateException;
+use App\Exceptions\Clients\ClientMacIllegalException;
 
 class ClientService
 {
@@ -239,14 +240,19 @@ class ClientService
     /**
      * Get authorization info
      */
-    public function getAuthorization(string $serialNo) : object
-    {
+    public function getAuthorization(
+        string $serialNo,
+        string $macAddr
+    ) : object {
         $client = ClientModel::where('serial_no', $serialNo)->first();
         if ( ! $client) {
             throw new ClientNotExistsException(sprintf('客户软件: %s 不存在', $serialNo));
         }
         if ( ! $client->isActivate()) {
             throw new ClientNotActivateException('客户软件未激活');
+        }
+        if ($client->mac_address != $macAddr) {
+            throw new ClientMacIllegalException('MAC地址不合法');
         }
 
         return (object) [

@@ -47,9 +47,13 @@ class ClientController extends BaseController
         $request->request->set('serialNo', $serialNo);
         $this->validate($request, [
             'serialNo'      => 'required|serial_no',
+            'macAddr'       => 'required|string|max:32',
         ]);
 
-        $authInfo = $clientService->getAuthorization($serialNo);
+        $authInfo = $clientService->getAuthorization(
+            $serialNo,
+            $request->query->get('macAddr')
+        );
 
         return $this->json([
             'authBeginDate' => $authInfo->authBeginDate ?
