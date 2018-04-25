@@ -21,7 +21,8 @@ final class ExceptionCode
     const CLIENT_NOT_EXISTS = 10101;
     const CLIENT_EXISTS = 10102;
     const CLIENT_NOT_ACTIVATE = 10103;
-    const CLIENT_MAC_ILLEGAL = 10104;
+    const CLIENT_ACTIVED = 10104;
+    const CLIENT_MAC_ILLEGAL = 10105;
 
     //**********************
     //      Admin

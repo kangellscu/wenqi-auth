@@ -11,6 +11,7 @@ use App\Exceptions\Clients\ClientNotExistsException;
 use App\Exceptions\Clients\ClientExistsException;
 use App\Exceptions\Clients\ClientNotActivateException;
 use App\Exceptions\Clients\ClientMacIllegalException;
+use App\Exceptions\Clients\ClientActivatedException;
 
 class ClientService
 {
@@ -33,13 +34,13 @@ class ClientService
             throw new ClientNotExistsException('软件编号不存在，请联系管理人员添加');
         }
         if ($client->isActivate()) {
-            $authEndDate = $client->auth_end_date ?: Carbon::yesterday();
-        } else {
-            $client->mac_address = $macAddr;
-            $client->disk_serial_no = $diskSerialNo;
-            $client->activate()->save();
-            $authEndDate = $client->auth_end_date ?: Carbon::tomorrow();
+            throw new ClientActivatedException(sprintf('软件编号: %s已激活，请不要重复激活', $serialNo));
         }
+
+        $client->mac_address = $macAddr;
+        $client->disk_serial_no = $diskSerialNo;
+        $client->activate()->save();
+        $authEndDate = $client->auth_end_date ?: Carbon::tomorrow();
 
         return (object) [
             'authEndDate'   => $authEndDate,
