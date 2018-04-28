@@ -1,6 +1,6 @@
 @inject('request', 'Illuminate\Http\Request')
 @php
-    $navNum = 1;
+    $navNum = 5;
     if ($page == 1) {
         $navStart = 0;
     } elseif ($page % $navNum == 0) {
