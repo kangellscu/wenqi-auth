@@ -10,4 +10,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    /**
+     * Default list page size
+     *
+     * @var int
+     */
+    protected $defaultPageSize = 10;
 }
